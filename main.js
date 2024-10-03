@@ -6,7 +6,7 @@ function renderNotes() {
 
     notes.forEach((note, index) => {
         const noteItem = document.createElement('li');
-        noteItem.textContent = note;
+        noteItem.textContent = note.name;
         notesList.appendChild(noteItem);
     });
 }
@@ -14,12 +14,18 @@ function renderNotes() {
 function handleFormSubmit(event) {
     event.preventDefault();
 
-    const noteInput = document.getElementById('note-input');
-    const newNote = noteInput.value.trim();
+    const noteName = document.getElementById('note-name-input');
+    const noteContent = document.getElementById('note-content-input');
+    const newNote = {
+        name: noteName.value,
+        content: noteContent.value
+    };
 
-    if (newNote !== '') {
+    if (newNote.name !== '' && newNote.content !== '') {
         notes.push(newNote);
-        noteInput.value = '';
+
+        noteName.value = '';
+        noteContent.value = '';
         renderNotes();
     }
 }
