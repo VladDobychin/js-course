@@ -1,5 +1,14 @@
 let notes = [];
 
+function loadNotesFromStorage() {
+    const savedNotes = localStorage.getItem('notes');
+    if (savedNotes) {
+        console.log('Notes found');
+        notes = JSON.parse(savedNotes);
+        renderNotes();
+    }
+}
+
 function renderNotes() {
     const notesList = document.getElementById('notes-list');
     notesList.innerHTML = '';
@@ -24,6 +33,8 @@ function handleFormSubmit(event) {
     if (newNote.name !== '' && newNote.content !== '') {
         notes.push(newNote);
 
+        localStorage.setItem('notes', JSON.stringify(notes));
+
         noteName.value = '';
         noteContent.value = '';
         renderNotes();
@@ -31,3 +42,4 @@ function handleFormSubmit(event) {
 }
 
 document.getElementById('note-form').addEventListener('submit', handleFormSubmit);
+document.addEventListener('DOMContentLoaded', loadNotesFromStorage);
