@@ -1,23 +1,32 @@
 let notes = [];
 
-function loadNotesFromStorage() {
-    const savedNotes = localStorage.getItem('notes');
-    if (savedNotes) {
-        console.log('Notes found');
-        notes = JSON.parse(savedNotes);
-        renderNotes();
-    }
-}
-
 function renderNotes() {
     const notesList = document.getElementById('notes-list');
     notesList.innerHTML = '';
 
     notes.forEach((note, index) => {
         const noteItem = document.createElement('li');
-        noteItem.textContent = note.name;
+
+        const noteName = document.createElement('strong');
+        noteName.textContent = note.name;
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.style.marginLeft = '10px';
+        deleteButton.addEventListener('click', () => {
+            deleteNote(index);
+        })
+
+        noteItem.appendChild(noteName);
+        noteItem.appendChild(deleteButton);
         notesList.appendChild(noteItem);
     });
+}
+
+function deleteNote(index) {
+    notes.splice(index, 1);
+    localStorage.setItem('notes', JSON.stringify(notes));
+    renderNotes();
 }
 
 function handleFormSubmit(event) {
@@ -37,6 +46,15 @@ function handleFormSubmit(event) {
 
         noteName.value = '';
         noteContent.value = '';
+        renderNotes();
+    }
+}
+
+function loadNotesFromStorage() {
+    const savedNotes = localStorage.getItem('notes');
+    if (savedNotes) {
+        console.log('Notes found');
+        notes = JSON.parse(savedNotes);
         renderNotes();
     }
 }
