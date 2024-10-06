@@ -1,4 +1,5 @@
 let notes = [];
+let currentNoteIndex = null;
 
 function renderNotes() {
     const notesList = document.getElementById('notes-list');
@@ -13,10 +14,22 @@ function renderNotes() {
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'X';
-        deleteButton.classList.add('delete-button'); // Add a class for styling
+        deleteButton.classList.add('delete-button');
         deleteButton.addEventListener('click', () => {
+            event.stopPropagation()
             deleteNote(index);
         });
+
+        noteItem.addEventListener('click', () => {
+            currentNoteIndex = index;
+
+            const noteName = document.getElementById('note-name-input');
+            const noteContent = document.getElementById('note-content-input');
+
+            noteName.value = note.name;
+            noteContent.value = note.content;
+            setFormMode('edit');
+        })
 
         noteItem.appendChild(noteName);
         noteItem.appendChild(deleteButton);
@@ -24,31 +37,61 @@ function renderNotes() {
     });
 }
 
-function deleteNote(index) {
-    notes.splice(index, 1);
-    localStorage.setItem('notes', JSON.stringify(notes));
-    renderNotes();
-}
-
 function handleFormSubmit(event) {
     event.preventDefault();
 
     const noteName = document.getElementById('note-name-input');
     const noteContent = document.getElementById('note-content-input');
-    const newNote = {
+    const note = {
         name: noteName.value,
         content: noteContent.value
     };
 
-    if (newNote.name !== '' && newNote.content !== '') {
-        notes.push(newNote);
+    if (note.name !== '' && note.content !== '') {
+        if (currentNoteIndex === null) {
+            // Add new note
+            notes.push(note);
+        } else {
+            // Update existing note
+            notes[currentNoteIndex] = note;
+        }
 
         localStorage.setItem('notes', JSON.stringify(notes));
-
         noteName.value = '';
         noteContent.value = '';
+        setFormMode('add');
         renderNotes();
     }
+}
+
+function setFormMode(formMode) {
+    const mainHeader = document.getElementById('main-content-header');
+    const submitBtn = document.getElementById('submit-button');
+    const cancelBtn = document.getElementById('cancel-button');
+    const noteName = document.getElementById('note-name-input');
+    const noteContent = document.getElementById('note-content-input');
+
+    if (formMode === 'edit') {
+        mainHeader.textContent = 'Edit existing note';
+        submitBtn.textContent = 'Save changes';
+        cancelBtn.style.display = 'inline';
+    }
+
+    if (formMode === 'add') {
+        mainHeader.textContent = 'Add a New Note';
+        submitBtn.textContent = 'Add note';
+        cancelBtn.style.display = 'none';
+        noteName.value = '';
+        noteContent.value = '';
+        currentNoteIndex = null;
+    }
+}
+
+function deleteNote(index) {
+    notes.splice(index, 1);
+    localStorage.setItem('notes', JSON.stringify(notes));
+    setFormMode('add');
+    renderNotes();
 }
 
 function loadNotesFromStorage() {
@@ -59,5 +102,11 @@ function loadNotesFromStorage() {
     }
 }
 
+document.getElementById('cancel-button').addEventListener('click', () => {
+    setFormMode('add');
+})
+document.getElementById('add-note-btn').addEventListener('click', () => {
+    setFormMode('add');
+})
 document.getElementById('note-form').addEventListener('submit', handleFormSubmit);
 document.addEventListener('DOMContentLoaded', loadNotesFromStorage);

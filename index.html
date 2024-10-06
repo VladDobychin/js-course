@@ -10,7 +10,10 @@
     <div class="container">
         <!-- Sidebar for Notes List -->
         <aside class="sidebar">
-            <h2>Notes</h2>
+            <div class='sidebar-header-container'>
+                <h2>Notes</h2>
+                <button id="add-note-btn">+</button>
+            </div>
             <ul id="notes-list">
                 <!-- Notes will be listed here -->
             </ul>
@@ -18,11 +21,14 @@
 
         <!-- Main content area -->
         <main class="main-content">
-            <h2>Add a New Note</h2>
+            <h2 id='main-content-header'>Add a New Note</h2>
             <form id="note-form">
                 <input id='note-name-input' placeholder='Type your note name here...' required></input>
                 <textarea id="note-content-input" placeholder="Type your note here..." required></textarea>
-                <button type="submit">Add Note</button>
+                <div class='form-buttons-container'>
+                    <button class="btn submit" type="submit" id="submit-button">Add Note</button>
+                    <button class="btn cancel" type="button" id="cancel-button" style="display:none;">Cancel</button>
+                </div>
             </form>
         </main>
     </div>
