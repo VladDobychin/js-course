@@ -34,18 +34,4 @@ export default class NotesView {
         this.noteName.value = '';
         this.noteContent.value = '';
     }
-
-    setFormMode(formMode) {
-        if (formMode === 'edit') {
-            this.mainHeader.textContent = 'Edit existing note';
-            this.submitBtn.textContent = 'Save changes';
-            this.cancelBtn.style.display = 'inline';
-        }
-
-        if (formMode === 'add') {
-            this.mainHeader.textContent = 'Add a New Note';
-            this.submitBtn.textContent = 'Add note';
-            this.cancelBtn.style.display = 'none';
-        }
-    }
 }

@@ -21,46 +21,8 @@ export default class NotesController {
                 }
 
                 this.view.clearForm();
-                this.view.setFormMode('add');
-                this.view.displayNotes(this.model.getNotes());
-                this.attachNoteListeners();
+                this.view.displayNotes(this.model.getNotes())
             }
         });
-
-        this.view.addNoteBtn.addEventListener('click', () => {
-            this.view.clearForm();
-            this.view.setFormMode('add');
-            this.model.currentNoteIndex = null;
-        });
-
-        this.view.cancelBtn.addEventListener('click', () => {
-            this.view.clearForm();
-            this.view.setFormMode('add');
-            this.model.currentNoteIndex = null;
-        })
-
-        this.attachNoteListeners();
-    }
-
-    attachNoteListeners() {
-        const noteItems = document.querySelectorAll('.note-item');
-        noteItems.forEach((noteItem, index) => {
-            noteItem.addEventListener('click', () => {
-                const note = this.model.getNotes()[index];
-                this.model.currentNoteIndex = index;
-                this.view.noteName.value = note.name;
-                this.view.noteContent.value = note.content;
-                this.view.setFormMode('edit');
-            });
-
-            noteItem.querySelector('.delete-button').addEventListener('click', (event) => {
-                event.stopPropagation();
-                this.model.deleteNote(index);
-                this.view.clearForm();
-                this.view.setFormMode('add');
-                this.view.displayNotes(this.model.getNotes());
-                this.attachNoteListeners();
-            });
-        })
     }
 }
