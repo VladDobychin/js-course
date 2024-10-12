@@ -1,9 +1,12 @@
-let notes = [];
-let currentNoteIndex = null;
+import NoteModel from './NoteModel.js';
+
+const noteModel = new NoteModel();
 
 function renderNotes() {
     const notesList = document.getElementById('notes-list');
     notesList.innerHTML = '';
+
+    const notes = noteModel.getNotes();
 
     notes.forEach((note, index) => {
         const noteItem = document.createElement('li');
@@ -15,13 +18,15 @@ function renderNotes() {
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'X';
         deleteButton.classList.add('delete-button');
-        deleteButton.addEventListener('click', () => {
+        deleteButton.addEventListener('click', (event) => {
             event.stopPropagation()
-            deleteNote(index);
+            noteModel.deleteNote(index);
+            setFormMode('add');
+            renderNotes();
         });
 
         noteItem.addEventListener('click', () => {
-            currentNoteIndex = index;
+            noteModel.setCurrentNoteIndex(index);
 
             const noteName = document.getElementById('note-name-input');
             const noteContent = document.getElementById('note-content-input');
@@ -48,15 +53,14 @@ function handleFormSubmit(event) {
     };
 
     if (note.name !== '' && note.content !== '') {
-        if (currentNoteIndex === null) {
+        if (noteModel.getCurrentNoteIndex() === null) {
             // Add new note
-            notes.push(note);
+            noteModel.addNote(note);
         } else {
             // Update existing note
-            notes[currentNoteIndex] = note;
+            noteModel.updateNote(note);
         }
 
-        localStorage.setItem('notes', JSON.stringify(notes));
         noteName.value = '';
         noteContent.value = '';
         setFormMode('add');
@@ -79,25 +83,17 @@ function setFormMode(formMode) {
 
     if (formMode === 'add') {
         mainHeader.textContent = 'Add a New Note';
-        submitBtn.textContent = 'Add note';
+        submitBtn.textContent = 'Add Note';
         cancelBtn.style.display = 'none';
         noteName.value = '';
         noteContent.value = '';
-        currentNoteIndex = null;
+        noteModel.setCurrentNoteIndex(null);
     }
 }
 
-function deleteNote(index) {
-    notes.splice(index, 1);
-    localStorage.setItem('notes', JSON.stringify(notes));
-    setFormMode('add');
-    renderNotes();
-}
-
 function loadNotesFromStorage() {
-    const savedNotes = localStorage.getItem('notes');
+    const savedNotes = noteModel.getNotes();
     if (savedNotes) {
-        notes = JSON.parse(savedNotes);
         renderNotes();
     }
 }
