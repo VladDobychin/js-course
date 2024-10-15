@@ -25,4 +25,9 @@ export default class NotesList {
             noteItem.render(this.notesList);
         });
     }
+
+    update(notes) {
+        this.notes = notes;
+        this.render();
+    }
 }

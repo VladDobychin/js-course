@@ -2,12 +2,11 @@ import NoteModel from './NoteModel.js';
 import NotesList from './NotesList.js';
 
 const noteModel = new NoteModel();
+const notesList = new NotesList(noteModel.getNotes(), handleNoteClick, handleNoteDelete);
 
-function renderNotes() {
-    const notes = noteModel.getNotes();
-    const notesList = new NotesList(notes, handleNoteClick, handleNoteDelete);
+document.addEventListener('DOMContentLoaded', () => {
     notesList.init();
-}
+});
 
 function handleFormSubmit(event) {
     event.preventDefault();
@@ -31,7 +30,7 @@ function handleFormSubmit(event) {
         noteName.value = '';
         noteContent.value = '';
         setFormMode('add');
-        renderNotes();
+        notesList.update(noteModel.getNotes());
     }
 }
 
@@ -49,7 +48,7 @@ function handleNoteClick(note, index) {
 function handleNoteDelete(index) {
     noteModel.deleteNote(index);
     setFormMode('add');
-    renderNotes();
+    notesList.update(noteModel.getNotes());
 }
 
 
@@ -76,12 +75,6 @@ function setFormMode(formMode) {
     }
 }
 
-function loadNotesFromStorage() {
-    const savedNotes = noteModel.getNotes();
-    if (savedNotes) {
-        renderNotes();
-    }
-}
 
 document.getElementById('cancel-button').addEventListener('click', () => {
     setFormMode('add');
@@ -90,4 +83,3 @@ document.getElementById('add-note-btn').addEventListener('click', () => {
     setFormMode('add');
 })
 document.getElementById('note-form').addEventListener('submit', handleFormSubmit);
-document.addEventListener('DOMContentLoaded', loadNotesFromStorage);
