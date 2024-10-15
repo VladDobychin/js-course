@@ -1,23 +1,12 @@
 import NoteModel from './NoteModel.js';
-import NoteItem from './NoteItem.js';
+import NotesList from './NotesList.js';
 
 const noteModel = new NoteModel();
-const notesList = document.getElementById('notes-list');
 
 function renderNotes() {
-    notesList.innerHTML = '';
-
     const notes = noteModel.getNotes();
-
-    notes.forEach((note, index) => {
-        const noteItem = new NoteItem(
-            note,
-            index,
-            () => handleNoteClick(note, index),
-            () => handleNoteDelete(index))
-        noteItem.init();
-        noteItem.render(notesList);
-    });
+    const notesList = new NotesList(notes, handleNoteClick, handleNoteDelete);
+    notesList.init();
 }
 
 function handleFormSubmit(event) {
