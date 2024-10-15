@@ -1,44 +1,22 @@
 import NoteModel from './NoteModel.js';
+import NoteItem from './NoteItem.js';
 
 const noteModel = new NoteModel();
+const notesList = document.getElementById('notes-list');
 
 function renderNotes() {
-    const notesList = document.getElementById('notes-list');
     notesList.innerHTML = '';
 
     const notes = noteModel.getNotes();
 
     notes.forEach((note, index) => {
-        const noteItem = document.createElement('li');
-        noteItem.classList.add('note-item');
-
-        const noteName = document.createElement('strong');
-        noteName.textContent = note.name;
-
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'X';
-        deleteButton.classList.add('delete-button');
-        deleteButton.addEventListener('click', (event) => {
-            event.stopPropagation()
-            noteModel.deleteNote(index);
-            setFormMode('add');
-            renderNotes();
-        });
-
-        noteItem.addEventListener('click', () => {
-            noteModel.setCurrentNoteIndex(index);
-
-            const noteName = document.getElementById('note-name-input');
-            const noteContent = document.getElementById('note-content-input');
-
-            noteName.value = note.name;
-            noteContent.value = note.content;
-            setFormMode('edit');
-        })
-
-        noteItem.appendChild(noteName);
-        noteItem.appendChild(deleteButton);
-        notesList.appendChild(noteItem);
+        const noteItem = new NoteItem(
+            note,
+            index,
+            () => handleNoteClick(note, index),
+            () => handleNoteDelete(index))
+        noteItem.init();
+        noteItem.render(notesList);
     });
 }
 
@@ -67,6 +45,24 @@ function handleFormSubmit(event) {
         renderNotes();
     }
 }
+
+function handleNoteClick(note, index) {
+    noteModel.setCurrentNoteIndex(index);
+
+    const noteName = document.getElementById('note-name-input');
+    const noteContent = document.getElementById('note-content-input');
+
+    noteName.value = note.name;
+    noteContent.value = note.content;
+    setFormMode('edit');
+}
+
+function handleNoteDelete(index) {
+    noteModel.deleteNote(index);
+    setFormMode('add');
+    renderNotes();
+}
+
 
 function setFormMode(formMode) {
     const mainHeader = document.getElementById('main-content-header');
