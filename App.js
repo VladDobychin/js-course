@@ -1,5 +1,6 @@
 import NotesList from './NotesList.js';
 import NoteModel from './NoteModel.js';
+import Form from './Form.js';
 
 export default class App {
     constructor() {
@@ -10,23 +11,24 @@ export default class App {
             this.handleNoteDelete.bind(this)
         )
         this.handleFormSubmit = this.handleFormSubmit.bind(this)
+        this.form = new Form(this.noteModel, this.handleFormSubmit);
     }
 
     init() {
         document.addEventListener('DOMContentLoaded', () => {
             this.notesList.init();
+            this.form.init();
             this.setupEventListeners();
         });
     }
 
     setupEventListeners() {
         document.getElementById('cancel-button').addEventListener('click', () => {
-            this.setFormMode('add');
+            this.form.setFormMode('add');
         })
         document.getElementById('add-note-btn').addEventListener('click', () => {
-            this.setFormMode('add');
+            this.form.setFormMode('add');
         })
-        document.getElementById('note-form').addEventListener('submit', this.handleFormSubmit);
     }
 
     handleFormSubmit(event) {
@@ -46,9 +48,8 @@ export default class App {
                 this.noteModel.updateNote(note);
             }
 
-            noteName.value = '';
-            noteContent.value = '';
-            this.setFormMode('add');
+            this.form.resetForm();
+            this.form.setFormMode('add');
             this.notesList.update(this.noteModel.getNotes());
         }
     }
@@ -61,35 +62,12 @@ export default class App {
 
         noteName.value = note.name;
         noteContent.value = note.content;
-        this.setFormMode('edit');
+        this.form.setFormMode('edit');
     }
 
     handleNoteDelete(index) {
         this.noteModel.deleteNote(index);
-        this.setFormMode('add');
+        this.form.setFormMode('add');
         this.notesList.update(this.noteModel.getNotes());
-    }
-
-    setFormMode(formMode) {
-        const mainHeader = document.getElementById('main-content-header');
-        const submitBtn = document.getElementById('submit-button');
-        const cancelBtn = document.getElementById('cancel-button');
-        const noteName = document.getElementById('note-name-input');
-        const noteContent = document.getElementById('note-content-input');
-
-        if (formMode === 'edit') {
-            mainHeader.textContent = 'Edit existing note';
-            submitBtn.textContent = 'Save changes';
-            cancelBtn.style.display = 'inline';
-        }
-
-        if (formMode === 'add') {
-            mainHeader.textContent = 'Add a New Note';
-            submitBtn.textContent = 'Add Note';
-            cancelBtn.style.display = 'none';
-            noteName.value = '';
-            noteContent.value = '';
-            this.noteModel.setCurrentNoteIndex(null);
-        }
     }
 }
