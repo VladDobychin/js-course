@@ -29,6 +29,7 @@ export default class App {
         document.getElementById('add-note-btn').addEventListener('click', () => {
             this.form.setFormMode('add');
         })
+        document.getElementById('search-bar').addEventListener('input', this.handleSearch.bind(this));
     }
 
     handleFormSubmit(event) {
@@ -69,5 +70,11 @@ export default class App {
         this.noteModel.deleteNote(index);
         this.form.setFormMode('add');
         this.notesList.update(this.noteModel.getNotes());
+    }
+
+    handleSearch(event) {
+        const query = event.target.value.toLowerCase();
+        const filteredNotes = this.noteModel.getNotes().filter(note => note.name.toLowerCase().includes(query));
+        this.notesList.update(filteredNotes);
     }
 }
