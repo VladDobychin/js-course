@@ -4,6 +4,8 @@ export default class NoteItem {
         this.index = index;
         this.onNoteClick = onNoteClick;
         this.onDeleteClick = onDeleteClick;
+        this.noteItem = null;
+        this.deleteButton = null;
     }
 
     init() {
@@ -18,13 +20,13 @@ export default class NoteItem {
         this.deleteButton.classList.add('delete-button');
 
         this.noteItem.addEventListener('click', this.onNoteClick);
-        this.deleteButton.addEventListener('click', this._handleDelete.bind(this));
+        this.deleteButton.addEventListener('click', this.#handleDelete.bind(this));
 
         this.noteItem.appendChild(noteName);
         this.noteItem.appendChild(this.deleteButton);
     }
 
-    _handleDelete(event) {
+    #handleDelete(event) {
         event.stopPropagation();
         this.onDeleteClick(this.index);
     }
@@ -35,10 +37,10 @@ export default class NoteItem {
 
     destroy() {
         this.noteItem.removeEventListener('click', this.onNoteClick);
-        this.deleteButton.removeEventListener('click', this._handleDelete);
+        this.deleteButton.removeEventListener('click', this.#handleDelete);
 
         if (this.noteItem && this.noteItem.parentNode) {
             this.noteItem.parentNode.removeChild(this.noteItem);
         }
-    }3
+    }
 }
