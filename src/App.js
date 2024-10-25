@@ -1,6 +1,6 @@
-import NotesList from './NotesList.js';
-import NoteModel from './NoteModel.js';
-import Form from './Form.js';
+import NotesList from './components/NotesList.js';
+import NoteModel from './components/NoteModel.js';
+import Form from './components/Form.js';
 
 export default class App {
     constructor() {
