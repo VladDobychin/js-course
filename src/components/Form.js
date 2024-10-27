@@ -1,7 +1,7 @@
 export default class Form {
     constructor(props) {
         this.handleFormSubmit = props.handleFormSubmit;
-        this.noteModel = props.noteModel;
+        this.noteRepository = props.noteRepository;
     }
 
     init() {
@@ -18,7 +18,7 @@ export default class Form {
     resetForm() {
         this.noteName.value = '';
         this.noteContent.value = '';
-        this.noteModel.setCurrentNoteIndex(null);
+        this.noteRepository.setCurrentNoteIndex(null);
     }
 
     setFormMode(formMode) {
@@ -34,7 +34,7 @@ export default class Form {
             this.cancelBtn.style.display = 'none';
             this.noteName.value = '';
             this.noteContent.value = '';
-            this.noteModel.setCurrentNoteIndex(null);
+            this.noteRepository.setCurrentNoteIndex(null);
         }
     }
 }

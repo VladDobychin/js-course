@@ -1,4 +1,4 @@
-export default class NoteModel {
+export default class NoteRepository {
     constructor() {
         this.notes = JSON.parse(localStorage.getItem('notes')) || [];
         this.currentNoteIndex = null;
