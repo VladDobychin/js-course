@@ -5,13 +5,16 @@ import Form from './components/Form.js';
 export default class App {
     constructor() {
         this.noteModel = new NoteModel();
-        this.notesList = new NotesList(
-            this.noteModel.getNotes(),
-            this.handleNoteClick.bind(this),
-            this.handleNoteDelete.bind(this)
-        )
+        this.notesList = new NotesList({
+                notes: this.noteModel.getNotes(),
+                handleNoteClick: this.handleNoteClick.bind(this),
+                handleNoteDelete: this.handleNoteDelete.bind(this)
+            })
         this.handleFormSubmit = this.handleFormSubmit.bind(this)
-        this.form = new Form(this.noteModel, this.handleFormSubmit);
+        this.form = new Form({
+            noteModel: this.noteModel,
+            handleFormSubmit: this.handleFormSubmit
+        });
     }
 
     init() {

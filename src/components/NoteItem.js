@@ -1,9 +1,9 @@
 export default class NoteItem {
-    constructor(note, index, onNoteClick, onDeleteClick) {
-        this.note = note;
-        this.index = index;
-        this.onNoteClick = onNoteClick;
-        this.onDeleteClick = onDeleteClick;
+    constructor(props) {
+        this.note = props.note;
+        this.index = props.index;
+        this.handleNoteClick = props.handleNoteClick;
+        this.handleNoteDelete = props.handleNoteDelete;
         this.noteItem = null;
         this.deleteButton = null;
     }
@@ -19,7 +19,7 @@ export default class NoteItem {
         this.deleteButton.textContent = 'X';
         this.deleteButton.classList.add('delete-button');
 
-        this.noteItem.addEventListener('click', this.onNoteClick);
+        this.noteItem.addEventListener('click', this.handleNoteClick);
         this.deleteButton.addEventListener('click', this.#handleDelete.bind(this));
 
         this.noteItem.appendChild(noteName);
@@ -28,7 +28,7 @@ export default class NoteItem {
 
     #handleDelete(event) {
         event.stopPropagation();
-        this.onDeleteClick(this.index);
+        this.handleNoteDelete(this.index);
     }
 
     render(parentElement) {
@@ -36,7 +36,7 @@ export default class NoteItem {
     }
 
     destroy() {
-        this.noteItem.removeEventListener('click', this.onNoteClick);
+        this.noteItem.removeEventListener('click', this.handleNoteClick);
         this.deleteButton.removeEventListener('click', this.#handleDelete);
 
         if (this.noteItem && this.noteItem.parentNode) {

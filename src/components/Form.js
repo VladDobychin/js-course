@@ -1,7 +1,7 @@
 export default class Form {
-    constructor(noteModel, handleFormSubmit) {
-        this.handleFormSubmit = handleFormSubmit;
-        this.noteModel = noteModel;
+    constructor(props) {
+        this.handleFormSubmit = props.handleFormSubmit;
+        this.noteModel = props.noteModel;
     }
 
     init() {
