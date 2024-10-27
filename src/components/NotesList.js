@@ -24,7 +24,7 @@ export default class NotesList {
             });
 
             noteItem.init();
-            noteItem.render(this.notesList);
+            noteItem.renderNoteInParent(this.notesList);
         });
     }
 

@@ -31,7 +31,7 @@ export default class NoteItem {
         this.handleNoteDelete(this.index);
     }
 
-    render(parentElement) {
+    renderNoteInParent(parentElement) {
         parentElement.appendChild(this.noteItem);
     }
 
