@@ -32,6 +32,10 @@ export default class NoteRepository {
         return this.currentNoteIndex;
     };
 
+    searchNotesByName(query) {
+        return this.notes.filter(note => note.name.toLowerCase().includes(query.toLowerCase()));
+    }
+
     _commit() {
         localStorage.setItem('notes', JSON.stringify(this.notes));
     };

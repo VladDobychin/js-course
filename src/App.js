@@ -76,8 +76,8 @@ export default class App {
     }
 
     handleSearch(event) {
-        const query = event.target.value.toLowerCase();
-        const filteredNotes = this.noteRepository.getNotes().filter(note => note.name.toLowerCase().includes(query));
+        const query = event.target.value;
+        const filteredNotes = this.noteRepository.searchNotesByName(query);
         this.notesList.update(filteredNotes);
     }
 }
