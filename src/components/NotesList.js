@@ -16,15 +16,13 @@ export default class NotesList {
         this.notesList.innerHTML = '';
 
         this.notes.forEach((note, index) => {
-            const noteItem = new NoteItem({
+            new NoteItem({
                 note: note,
                 index: index,
                 handleNoteClick: () => this.handleNoteClick(note, index),
-                handleNoteDelete: () => this.handleNoteDelete(index)
+                handleNoteDelete: () => this.handleNoteDelete(index),
+                parentElement: this.notesList
             });
-
-            noteItem.init();
-            noteItem.renderNoteInParent(this.notesList);
         });
     }
 

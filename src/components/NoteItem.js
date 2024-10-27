@@ -4,8 +4,12 @@ export default class NoteItem {
         this.index = props.index;
         this.handleNoteClick = props.handleNoteClick;
         this.handleNoteDelete = props.handleNoteDelete;
+        this.parentElement = props.parentElement;
         this.noteItem = null;
         this.deleteButton = null;
+
+        this.init();
+        this.renderNoteInParent(this.parentElement);
     }
 
     init() {
