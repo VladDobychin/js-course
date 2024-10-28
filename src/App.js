@@ -45,7 +45,7 @@ export default class App {
             content: noteContent.value
         };
 
-        if (note.name !== '' && note.content !== '') {
+        if (note.name && note.content) {
             if (this.noteRepository.getCurrentNoteIndex() === null) {
                 this.noteRepository.addNote(note);
             } else {
