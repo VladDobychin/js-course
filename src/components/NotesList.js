@@ -5,6 +5,7 @@ export default class NotesList {
         this.notes = props.notes;
         this.handleNoteClick = props.handleNoteClick;
         this.handleNoteDelete = props.handleNoteDelete;
+        this.notesList = null;
     }
 
     init() {
