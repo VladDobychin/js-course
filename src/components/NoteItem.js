@@ -33,6 +33,7 @@ export default class NoteItem {
     #handleDelete(event) {
         event.stopPropagation();
         this.handleNoteDelete(this.index);
+        this.destroy();
     }
 
     renderNoteInParent(parentElement) {
