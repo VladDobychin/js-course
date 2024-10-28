@@ -1,4 +1,4 @@
-export default class NoteModel {
+export default class NoteRepository {
     constructor() {
         this.notes = JSON.parse(localStorage.getItem('notes')) || [];
         this.currentNoteIndex = null;
@@ -31,6 +31,10 @@ export default class NoteModel {
     getCurrentNoteIndex() {
         return this.currentNoteIndex;
     };
+
+    searchNotesByName(query) {
+        return this.notes.filter(note => note.name.toLowerCase().includes(query.toLowerCase()));
+    }
 
     _commit() {
         localStorage.setItem('notes', JSON.stringify(this.notes));

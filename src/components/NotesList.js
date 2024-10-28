@@ -1,11 +1,10 @@
 import NoteItem from './NoteItem.js';
 
 export default class NotesList {
-    constructor(notes, handleNoteClick, handleNoteDelete) {
-        this.notes = notes;
-        this.handleNoteClick = handleNoteClick;
-        this.handleNoteDelete = handleNoteDelete;
-        this.noteItems = [];
+    constructor(props) {
+        this.notes = props.notes;
+        this.handleNoteClick = props.handleNoteClick;
+        this.handleNoteDelete = props.handleNoteDelete;
     }
 
     init() {
@@ -16,21 +15,14 @@ export default class NotesList {
     render() {
         this.notesList.innerHTML = '';
 
-        this.noteItems.forEach(noteItem => noteItem.destroy());
-        this.noteItems = [];
-
         this.notes.forEach((note, index) => {
-            const noteItem = new NoteItem(
-                note,
-                index,
-                () => this.handleNoteClick(note, index),
-                () => this.handleNoteDelete(index)
-            );
-
-            noteItem.init();
-            noteItem.render(this.notesList);
-
-            this.noteItems.push(noteItem);
+            new NoteItem({
+                note: note,
+                index: index,
+                handleNoteClick: () => this.handleNoteClick(note, index),
+                handleNoteDelete: () => this.handleNoteDelete(index),
+                parentElement: this.notesList
+            });
         });
     }
 

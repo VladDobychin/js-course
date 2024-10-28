@@ -1,17 +1,20 @@
 import NotesList from './components/NotesList.js';
-import NoteModel from './components/NoteModel.js';
+import NoteRepository from './repositories/NoteRepository.js';
 import Form from './components/Form.js';
 
 export default class App {
     constructor() {
-        this.noteModel = new NoteModel();
-        this.notesList = new NotesList(
-            this.noteModel.getNotes(),
-            this.handleNoteClick.bind(this),
-            this.handleNoteDelete.bind(this)
-        )
+        this.noteRepository = new NoteRepository();
+        this.notesList = new NotesList({
+                notes: this.noteRepository.getNotes(),
+                handleNoteClick: this.handleNoteClick.bind(this),
+                handleNoteDelete: this.handleNoteDelete.bind(this)
+            })
         this.handleFormSubmit = this.handleFormSubmit.bind(this)
-        this.form = new Form(this.noteModel, this.handleFormSubmit);
+        this.form = new Form({
+            noteRepository: this.noteRepository,
+            handleFormSubmit: this.handleFormSubmit
+        });
     }
 
     init() {
@@ -42,21 +45,21 @@ export default class App {
             content: noteContent.value
         };
 
-        if (note.name !== '' && note.content !== '') {
-            if (this.noteModel.getCurrentNoteIndex() === null) {
-                this.noteModel.addNote(note);
+        if (note.name && note.content) {
+            if (this.noteRepository.getCurrentNoteIndex() === null) {
+                this.noteRepository.addNote(note);
             } else {
-                this.noteModel.updateNote(note);
+                this.noteRepository.updateNote(note);
             }
 
             this.form.resetForm();
             this.form.setFormMode('add');
-            this.notesList.update(this.noteModel.getNotes());
+            this.notesList.update(this.noteRepository.getNotes());
         }
     }
 
     handleNoteClick(note, index) {
-        this.noteModel.setCurrentNoteIndex(index);
+        this.noteRepository.setCurrentNoteIndex(index);
 
         const noteName = document.getElementById('note-name-input');
         const noteContent = document.getElementById('note-content-input');
@@ -67,14 +70,14 @@ export default class App {
     }
 
     handleNoteDelete(index) {
-        this.noteModel.deleteNote(index);
+        this.noteRepository.deleteNote(index);
         this.form.setFormMode('add');
-        this.notesList.update(this.noteModel.getNotes());
+        this.notesList.update(this.noteRepository.getNotes());
     }
 
     handleSearch(event) {
-        const query = event.target.value.toLowerCase();
-        const filteredNotes = this.noteModel.getNotes().filter(note => note.name.toLowerCase().includes(query));
+        const query = event.target.value;
+        const filteredNotes = this.noteRepository.searchNotesByName(query);
         this.notesList.update(filteredNotes);
     }
 }
